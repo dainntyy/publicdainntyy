@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace cursova
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Image = Image.FromFile("C:\\Users\\Hp\\Desktop\\C#\\cursova\\photo_2023-04-18_14-56-09.jpg");
+            double x, y, xmax, xmin, dx, a, q;
+            int count1 = 0, count2 = 0;
+            if (!double.TryParse(textBox1.Text, out xmin))
+            {
+                MessageBox.Show("Invalid value of xmin.");
+                return;
+            }
+            if (!double.TryParse(textBox2.Text, out xmax))
+            {
+                MessageBox.Show("Invalid value of xmax.");
+                return;
+            }
+            if (!double.TryParse(textBox3.Text, out dx))
+            {
+                MessageBox.Show("Invalid value of dx.");
+                return;
+            }
+            if (!double.TryParse(textBox4.Text, out a))
+            {
+                MessageBox.Show("Invalid value of a.");
+                return;
+            }
+            Random random = new Random();
+            q = random.NextDouble();
+
+            for (x = xmin; x <= xmax; x += dx)
+            {
+                q = random.NextDouble();
+                if (q <= 0.8)
+                {
+                    listBox1.Items.Add(string.Format("q = {0}", q));
+                    count1++;
+                    if ((a - x) > 1) {
+                        y = q / (Math.Log(a - x));
+                        listBox1.Items.Add("x = " + x.ToString() + " y = " + y.ToString());
+                    }
+                    else
+                    {
+                        listBox1.Items.Add(string.Format("Error for x = {0}, log argument must be greater than 0", x));
+                    }
+                }
+                else
+                {
+                    listBox2.Items.Add(string.Format("q = {0}", q));
+                    count2++;
+                    if(Math.Sin(q*x) >= 0)
+                    {
+                        y = Math.Sqrt(Math.Sin(q * x));
+                        listBox2.Items.Add("x = " + x.ToString() + " y = " + y.ToString());
+                    }
+                    else
+                    {
+                        listBox2.Items.Add(string.Format("Error for x = {0}, value of sin must be greater than 0", x));
+                    }
+                }
+            }
+
+            listBox3.Items.Add("With f1(x) formula: " + count1.ToString());
+            listBox3.Items.Add("With f2(x) formula: " + count2.ToString());
+        }
+
+    }
+}
